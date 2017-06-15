@@ -1,5 +1,5 @@
 
-/* Bring in standard I/O so we can output the PNG to a file */
+
 #include <stdio.h>
 #include <visa.h>
 #include <stdlib.h>  
@@ -7,15 +7,20 @@
   
 #define VIERRORMSG(V,M) if ((V)!=VI_SUCCESS) { fprintf(stderr, "[ERROR] " M "\n"); exit(1); }  
 
-char buf[300];  
-ViSession viDG1022;  
+/* Declare global variables */
+
+char viSessionBuff[300];  
 ViStatus viStatus;  
 ViSession defaultRM;  
+ViSession viDG1022;
+
 ViFindList fList;
 ViUInt32 numInst;
 ViChar desc[VI_FIND_BUFLEN];
 ViChar resultBuffer[256];
 ViUInt32 resultCount;
+
+/* Initialize VISA system */
 
 int initialization(void)
 {
@@ -74,11 +79,11 @@ setup(void)
 int
 loop(void)
 {
-  double f0 = 20000;
-  double df = 100000;
+  double f0 = 1000;
+  double df = 1000;
   double f = f0;
   char fbuff[22];
-  for(int i = 1; i<=10; i++)
+  for(int i = 1; i<=50; i++)
   {
     printf("\nSetting frequency = %0.f\n",f);
     sprintf(fbuff,"APPL:SIN %.0f,1,0\n",f);
@@ -99,6 +104,8 @@ cleanup(void)
       viClose(viDG1022);
       viClose(fList);
       viClose(defaultRM);
+
+    return 0;
 }
 
   
